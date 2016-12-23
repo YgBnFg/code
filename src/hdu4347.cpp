@@ -8,7 +8,7 @@ int no;
 struct Point {
 	int d[6];
 	bool operator <(const Point &x) const {
-		return d[no] > x.d[no];
+		return d[no] < x.d[no];
 	}
 };
 
@@ -25,7 +25,7 @@ public:
 };
 void Kd_tree::init(int n, int K) {
 	this->k = K;
-	for (int i = 1; i <= n; ++i) {
+	for (int i = 0; i < n; ++i) {
 		for (int j = 0; j < K; j++) {
 			scanf("%d", &p[i].d[j]);
 		}
@@ -37,7 +37,7 @@ void Kd_tree::build(int l, int r, int u, int de) {
 	leaf[u << 1] = leaf[u << 1 | 1] = 1;
 	int mid = (l + r) >> 1;
 	no = de%k;
-	std::nth_element(p + l, p + mid, p + r+1);
+	std::nth_element(p + l , p + mid , p + r +1);
 	tp[u] = p[mid];
 	build(l, mid-1, u << 1, de + 1);
 	build(mid + 1, r, u << 1 | 1, de + 1);
@@ -51,7 +51,7 @@ void Kd_tree::query(Point ask, int u, int de) {
 	}
 	int kno = de%k;
 	int left = u << 1, right = left + 1;
-	if (ask.d[kno] > tp[u].d[kno]) std::swap(left,right);
+	if (ask.d[kno] >= tp[u].d[kno]) std::swap(left,right);
 	if(!leaf[u]) query(ask, left, de+1);
 	if (q.size() < num) {
 		q.push(tmp);
@@ -78,7 +78,7 @@ int main() {
 		while (t--) {
 			Point ask;
 			ans.clear();
-			for (int i = 1; i <= K; i++) {
+			for (int i = 0; i < K; ++i) {
 				scanf("%d", &ask.d[i]);
 			}
 			int m;
@@ -89,6 +89,7 @@ int main() {
 				ans.push_back(q.top().second);
 				q.pop();
 			}
+			printf("the closest %d points are :\n", kd->num);
 			for (int i = ans.size()-1; i >= 0; --i) {
 				for (int j = 0; j < K-1; ++j) {
 					printf("%d ", ans[i].d[j]);
