@@ -72,7 +72,7 @@ int main() {
 	int n, K;
 	while (~scanf("%d%d", &n, &K)) {
 		kd->init(n, K);
-		kd->build(1, n, 1, 0);
+		kd->build(0, n-1, 1, 0);
 		int t;
 		scanf("%d", &t);
 		while (t--) {
